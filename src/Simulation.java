@@ -14,7 +14,7 @@ public class Simulation {
 
     public static final int CONSECUTIVE_WINS = 10;
     public static final int THREADS = 4;
-    public static final int REPEATS = 8000;
+    public static final int REPEATS = 8000000;
     public static final int REPEATS_PER_THREAD = REPEATS / THREADS;
 
     private static long total_tosses = 0;
@@ -22,19 +22,11 @@ public class Simulation {
     private static int min = Integer.MAX_VALUE;
     private static int max = 0;
 
-    private static PrintWriter writer;
 
     public static CountDownLatch latch;
     public static void main(String[] args) throws FileNotFoundException {
 
         latch = new CountDownLatch(THREADS);
-        JFileChooser fc = new JFileChooser();
-        int result = fc.showSaveDialog(null);
-        if(result != JFileChooser.APPROVE_OPTION) {
-            throw new RuntimeException("no selected file");
-        }
-
-        writer = new PrintWriter(fc.getSelectedFile());
 
         //measure performance
         long startTime = System.currentTimeMillis();
@@ -59,7 +51,6 @@ public class Simulation {
         System.out.println("min, max " + min + ", " + max);
         System.out.println("repeats " + repeats);
         System.out.println("time " + executionTime);
-        writer.close();
     }
 
     public static synchronized void addRepeat(int count) {
@@ -71,7 +62,5 @@ public class Simulation {
         if (count < min) {
             min = count;
         }
-
-        writer.println(repeats + "," + count);
     }
 }
